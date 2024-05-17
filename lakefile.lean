@@ -7,4 +7,4 @@ package «ssft24» where
   -- add package configuration options here
   moreGlobalServerArgs := #["--tstack=32000"]
 
-lean_lib Imp2 where
+lean_lib Imp where
