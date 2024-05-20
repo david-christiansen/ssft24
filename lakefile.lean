@@ -1,7 +1,7 @@
 import Lake
 open Lake DSL
 
-require LeanSAT from git "https://github.com/leanprover/leansat.git"
+require LeanSAT from git "https://github.com/leanprover/leansat.git"@"main"
 
 package «ssft24» where
   -- add package configuration options here
