@@ -74,12 +74,7 @@ theorem Falsy.some_zero : Falsy (some v) = (v = 0) := by
 
 @[simp]
 theorem Falsy.some_const : Falsy (some (BitVec.ofNat _ n)) → (n % 2 ^ 32 = 0) := by
-  simp [Falsy, BitVec.ofNat]
-  unfold Fin.ofNat'
-  rw [← Fin.val_inj]
-  simp
-
-
+  simp [Falsy, BitVec.ofNat, ← Fin.val_inj]
 
 
 instance : Decidable (Falsy v) := inferInstanceAs (Decidable (v = some 0))
@@ -285,8 +280,7 @@ def smallStep (ρ : Env) (s : Stmt) : ValidStep ρ s ⊕ (Inhabited <| ValidStep
       | .inl ⟨_, _, step⟩ => .inl ⟨_, _, .seq1 step⟩
       | .inr ⟨c⟩ => .inr <| by
         constructor
-        intro h
-        let ⟨_, _, step⟩ := h
+        intro ⟨_, _, step⟩
         cases step
         . apply c
           constructor; assumption
@@ -296,8 +290,7 @@ def smallStep (ρ : Env) (s : Stmt) : ValidStep ρ s ⊕ (Inhabited <| ValidStep
     | some v => .inl ⟨_, _, .assign h⟩
     | none => .inr <| by
       constructor
-      intro h'
-      let ⟨_, _ , step⟩ := h'
+      intro ⟨_, _ , step⟩
       cases step
       next prf => rw [h] at prf; contradiction
   | .while c s =>
@@ -353,12 +346,6 @@ def fib : Stmt := program {
 #eval
   let ρ' := runFor 200 (Env.init 42 |>.set "n" 6 |>.set "x" 0) fib
   ρ'.snd.snd.final ["x", "y", "n"]
-
-@[simp] theorem BitVec.shiftRight_shiftRight' (w : Nat) (x : BitVec w) (n m : BitVec w)
-    (h : (n + m).toNat = n.toNat + m.toNat) :
-    (x >>> n) >>> m = x >>> (n + m) := by
-  show (x >>> n.toNat) >>> m.toNat = x >>> (n + m).toNat
-  simp [h, BitVec.shiftRight_shiftRight]
 
 def runFor' (n : Nat) (ρ : Env) (s : Stmt) : Option Env :=
   if let program {skip;} := s then
