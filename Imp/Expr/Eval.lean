@@ -1,5 +1,7 @@
 import Imp.Expr
 
+open Lean
+
 namespace Imp
 
 abbrev Value := BitVec 32

@@ -48,41 +48,41 @@ partial def delabStmt : Delab := do
     | _ => false
   match ← delabStmtInner with
   | `(stmt|~$e) => pure e
-  | s => `(term|program{$s})
+  | s => `(term|imp{$s})
 
 /-- info: Imp.Stmt.skip : Stmt -/
 #guard_msgs in
 #check Stmt.skip
 
 /--
-info: program {
+info: imp {
   skip;
 } : Stmt
 -/
 #guard_msgs in
-#check program {skip;}
+#check imp {skip;}
 
 /--
-info: program {
+info: imp {
   skip;
   skip;
 } : Stmt
 -/
 #guard_msgs in
-#check program {skip; skip;}
+#check imp {skip; skip;}
 
 /--
-info: program {
+info: imp {
   skip;
   skip;
   x := 5;
 } : Stmt
 -/
 #guard_msgs in
-#check program {skip; skip; x := 5;}
+#check imp {skip; skip; x := 5;}
 
 /--
-info: program {
+info: imp {
   skip;
   if (0 < x) {
     x := x - 1;
@@ -92,10 +92,10 @@ info: program {
 } : Stmt
 -/
 #guard_msgs in
-#check program {skip; if (x > 0) { x := x - 1;} else {skip;}}
+#check imp {skip; if (x > 0) { x := x - 1;} else {skip;}}
 
 /--
-info: program {
+info: imp {
   skip;
   while (0 < x) {
       x := x - 1;
@@ -111,14 +111,14 @@ info: program {
 } : Stmt
 -/
 #guard_msgs in
-#check program {skip; while (x > 0) { x := x - 1;} if (x) {skip;} else {while (x > 5) {skip; skip;}}}
+#check imp {skip; while (x > 0) { x := x - 1;} if (x) {skip;} else {while (x > 5) {skip; skip;}}}
 
 /--
 info: let s :=
-  program {
+  imp {
     skip;
   };
-program {
+imp {
   skip;
   while (0 < x) {
       x := x - 1;
@@ -134,4 +134,4 @@ program {
 } : Stmt
 -/
 #guard_msgs in
-#check let s := program {skip;}; program {skip; while (x > 0) { x := x - 1;} if (x) {skip;} else {while (x > 5) {skip; ~s}}}
+#check let s := imp {skip;}; imp {skip; while (x > 0) { x := x - 1;} if (x) {skip;} else {while (x > 5) {skip; ~s}}}

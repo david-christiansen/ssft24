@@ -20,15 +20,37 @@ scoped syntax "if " "(" exp ")" ppHardSpace "{" ppLine stmt ppDedent(ppLine "}" 
 scoped syntax "while " "(" exp ")" ppHardSpace "{" ppLine stmt ppDedent(ppLine "}") : stmt
 scoped syntax:max "~" term:max : stmt
 
-syntax "program" ppHardSpace "{" ppLine stmt ppDedent(ppLine "}") : term
+syntax "imp" ppHardSpace "{" ppLine stmt ppDedent(ppLine "}") : term
 
 
 open Lean in
 macro_rules
-  | `(program { skip; }) => `(Stmt.skip)
-  | `(program { $s1 $s2 }) => `(Stmt.seq (program {$s1}) (program {$s2}))
-  | `(program { $x:varname := $e;}) =>
-      `(Stmt.assign var {$x} expr {$e})
-  | `(program { if ($c) {$s1} else {$s2} }) => `(Stmt.if expr{$c} (program{$s1}) (program{$s2}))
-  | `(program { while ($c) {$s} }) => `(Stmt.while expr{$c} (program{$s}))
-  | `(program { ~$stx }) => pure stx
+  | `(imp { skip; }) => `(Stmt.skip)
+  | `(imp { $s1 $s2 }) => `(Stmt.seq (imp {$s1}) (imp {$s2}))
+  | `(imp { $x:varname := $e;}) =>
+      `(Stmt.assign (var {$x}) (expr {$e}))
+  | `(imp { if ($c) {$s1} else {$s2} }) => `(Stmt.if (expr{$c}) (imp{$s1}) (imp{$s2}))
+  | `(imp { while ($c) {$s} }) => `(Stmt.while (expr{$c}) (imp{$s}))
+  | `(imp { ~$stx }) => pure stx
+
+def swap : Stmt := imp {
+  temp := x;
+  x := y;
+  y := temp;
+}
+
+def min : Stmt := imp {
+  if (x < y) {
+    min := x;
+  } else {
+    min := y;
+  }
+}
+
+def fact : Stmt := imp {
+  out := 1;
+  while (n > 0) {
+    out := out * n;
+    n := n - 1;
+  }
+}

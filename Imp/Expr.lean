@@ -89,35 +89,35 @@ syntax:max "~" term:max : exp
 
 syntax "lean " "{ " term " }" : exp
 
-syntax "expr " "{ " exp " }" : term
+syntax:min "expr " "{ " exp " }" : term
 
 open Lean in
 macro_rules
   | `(expr{$x:ident}) => `(Expr.var $(quote x.getId.toString))
   | `(expr{$n:num}) => `(Expr.const $(quote n.getNat))
 
-  | `(expr{-$e}) => `(Expr.un .neg expr{$e})
-  | `(expr{!$e}) => `(Expr.un .not expr{$e})
+  | `(expr{-$e}) => `(Expr.un .neg (expr{$e}))
+  | `(expr{!$e}) => `(Expr.un .not (expr{$e}))
 
-  | `(expr{$e1 + $e2}) => `(Expr.bin .plus expr{$e1} expr{$e2})
-  | `(expr{$e1 * $e2}) => `(Expr.bin .times expr{$e1} expr{$e2})
-  | `(expr{$e1 - $e2}) => `(Expr.bin .minus expr{$e1} expr{$e2})
-  | `(expr{$e1 / $e2}) => `(Expr.bin .div expr{$e1} expr{$e2})
+  | `(expr{$e1 + $e2}) => `(Expr.bin .plus (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 * $e2}) => `(Expr.bin .times (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 - $e2}) => `(Expr.bin .minus (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 / $e2}) => `(Expr.bin .div (expr{$e1}) (expr{$e2}))
 
-  | `(expr{$e1 >>> $e2}) => `(Expr.bin .rsh expr{$e1} expr{$e2})
-  | `(expr{$e1 <<< $e2}) => `(Expr.bin .lsh expr{$e1} expr{$e2})
-  | `(expr{$e1 ||| $e2}) => `(Expr.bin .bor expr{$e1} expr{$e2})
-  | `(expr{$e1 &&& $e2}) => `(Expr.bin .band expr{$e1} expr{$e2})
+  | `(expr{$e1 >>> $e2}) => `(Expr.bin .rsh (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 <<< $e2}) => `(Expr.bin .lsh (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 ||| $e2}) => `(Expr.bin .bor (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 &&& $e2}) => `(Expr.bin .band (expr{$e1}) (expr{$e2}))
 
 
-  | `(expr{$e1 && $e2}) => `(Expr.bin .and expr{$e1} expr{$e2})
-  | `(expr{$e1 || $e2}) => `(Expr.bin .or expr{$e1} expr{$e2})
+  | `(expr{$e1 && $e2}) => `(Expr.bin .and (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 || $e2}) => `(Expr.bin .or (expr{$e1}) (expr{$e2}))
 
-  | `(expr{$e1 < $e2}) => `(Expr.bin .lt expr{$e1} expr{$e2})
-  | `(expr{$e1 ≤ $e2}) => `(Expr.bin .le expr{$e1} expr{$e2})
-  | `(expr{$e1 == $e2}) => `(Expr.bin .eq expr{$e1} expr{$e2})
-  | `(expr{$e1 ≥ $e2}) => `(Expr.bin .le expr{$e2} expr{$e1})
-  | `(expr{$e1 > $e2}) => `(Expr.bin .lt expr{$e2} expr{$e1})
+  | `(expr{$e1 < $e2}) => `(Expr.bin .lt (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 ≤ $e2}) => `(Expr.bin .le (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 == $e2}) => `(Expr.bin .eq (expr{$e1}) (expr{$e2}))
+  | `(expr{$e1 ≥ $e2}) => `(Expr.bin .le (expr{$e2}) (expr{$e1}))
+  | `(expr{$e1 > $e2}) => `(Expr.bin .lt (expr{$e2}) (expr{$e1}))
   | `(expr{($e)}) => `(expr{$e})
   | `(expr{~$stx}) => pure stx
 
