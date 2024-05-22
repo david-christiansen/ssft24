@@ -38,7 +38,19 @@ The following files are part of the first lecture:
      lectures)
    - `Filter/Query.lean` - a query language (not part of lectures)
 
+### Lab Session
 
+Please experiment with the Lean features and the ideas that were
+presented in the first lecture. Here are some exercises to get you
+started:
+
+ * Implement `map` for list. What are some properties that it should
+   satisfy? Prove that it does.
+ * State and prove some further properties of array filter (see the
+   list filter file if you need inspiration)
+ * Implement `map` for arrays. State and prove some properties about it.
+ * Define a function that appends two lists. Prove that the length of
+   the output is the sum of the lengths of the input.
 
 ## Second Lecture: 
 
@@ -48,7 +60,8 @@ written in Imp, a minimal imperative language that features while
 loops, mutable variables, and conditionals.
 
 The following files are part of the second lecture:
- * `Imp.lean` - the top-level module that exists to import the others
+ * `Imp.lean` - the top-level module that exists to import the others;
+   also contains a final demo.
  * `Imp/Expr.lean` - definition of an expression datatype and
    convenient syntax for writing it
  * `Imp/Expr/` - expressions and evaluation:
@@ -59,9 +72,32 @@ The following files are part of the second lecture:
      part of lectures)
  * `Imp/Stmt.lean` - definition of a statement datatype and convenient
    syntax for writing it
-   - `Imp/Stmt/Optimize.lean` - Optimization of expressions
+   - `Imp/Stmt/Basic.lean` - The core datastructure and syntax for statements
+   - `Imp/Stmt/Optimize.lean` - Optimization of statements
    - `Imp/Stmt/BigStep.lean` - Operational semantics and proof that
      optimization is correct
    - `Imp/Stmt/Delab.lean` - Interactive display of statements (not
      part of lectures)
 
+### Lab Session
+
+These exercises are intended to be done in the context of the
+development from the second lecture.
+
+ * Add a new case to the optimizer for `Expr` and update the
+   correctness proof accordingly
+ * These exercises don't require modifications to the `Stmt` datatype:
+   * Add a unary `if` statement (that is, one without an `else`clause)
+     to the user-facing syntax for `Stmt`
+   * Add a `do...while...` statement to the surface syntax that
+     executes the body at least once
+ * Add a `switch` statement like that of C, which takes an expression
+   and a sequence of clauses, each of which is a value and a
+   statement. The expression is evaluated, and then the first clause
+   whose value matches its result is executed. If no clause matches,
+   nothing happens.
+    * First, add it to the `Stmt` datatype and design a surface syntax
+      for it.
+    * Next, add it to the optimizer. It's fine if it does nothing.
+    * Add `switch` to the big-step semantics, and update the various
+      proofs.
