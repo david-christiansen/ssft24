@@ -1,8 +1,11 @@
-import Imp.Expr
+import Imp.Expr.Basic
 import Imp.Expr.Eval
 
 namespace Imp.Expr
 
+/--
+Optimizes an expression by folding constants.
+-/
 def optimize : Expr → Expr
   | .const i => .const i
   | .var x => .var x
@@ -19,6 +22,9 @@ def optimize : Expr → Expr
       else .bin op (.const i) (.const i')
     | e1', e2' => .bin op e1' e2'
 
+/--
+Optimization doesn't change the meaning of any expression
+-/
 theorem optimize_ok (e : Expr) : e.eval ρ = e.optimize.eval ρ := by
   induction e <;> simp [optimize]
   case un op e ih =>
@@ -30,3 +36,9 @@ theorem optimize_ok (e : Expr) : e.eval ρ = e.optimize.eval ρ := by
     split
     . simp [eval, BinOp.apply]; split <;> trivial
     . simp [eval]
+
+/--
+Optimization doesn't change the meaning of any expression
+-/
+theorem optimize_ok' (e : Expr) : e.eval ρ = e.optimize.eval ρ := by
+  induction e using optimize.induct <;> simp [optimize, eval, *]

@@ -1,7 +1,6 @@
 import Lean.PrettyPrinter.Delaborator
-import Imp.Stmt
+import Imp.Stmt.Basic
 import Imp.Expr
-import Imp.Expr.Delab
 
 open Lean PrettyPrinter.Delaborator SubExpr
 
@@ -36,7 +35,7 @@ partial def delabStmtInner : DelabM (TSyntax `stmt) := do
       `(stmt| ~$(← delab))
   annAsTerm stx
 
-@[delab app.Imp.Stmt.skip, delab app.Imp.Stmt.seq, delab app.Imp.Stmt.while, delab app.Imp.Stmt.assign, delab App.Imp.Stmt.if]
+@[delab app.Imp.Stmt.skip, delab app.Imp.Stmt.seq, delab app.Imp.Stmt.while, delab app.Imp.Stmt.assign, delab app.Imp.Stmt.if]
 partial def delabStmt : Delab := do
   -- This delaborator only understands a certain arity - bail if it's incorrect
   guard <| match_expr ← getExpr with

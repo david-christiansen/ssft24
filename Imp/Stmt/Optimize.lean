@@ -1,5 +1,6 @@
-import Imp.Expr.Optimize
-import Imp.Stmt
+import Imp.Expr
+import Imp.Stmt.Basic
+import Imp.Stmt.Delab
 
 namespace Imp.Stmt
 

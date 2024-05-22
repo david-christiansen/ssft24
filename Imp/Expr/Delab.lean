@@ -1,7 +1,8 @@
 import Lean.PrettyPrinter.Delaborator
-import Imp.Expr
+import Imp.Expr.Basic
+import Imp.Expr.Syntax
 
-open Lean PrettyPrinter.Delaborator SubExpr
+open Lean PrettyPrinter Delaborator SubExpr Parenthesizer
 
 namespace Imp.Expr.Delab
 
@@ -110,4 +111,4 @@ info: let x := expr { 23 };
 expr { ~x * ~x } : Expr
 -/
 #guard_msgs in
-#check let x := expr {23}; expr{~x * ~x}
+#check let x := expr {23}; expr {~x * ~x}
