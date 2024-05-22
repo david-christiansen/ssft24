@@ -39,6 +39,7 @@ def All (p : α → Prop) (arr : Array α) : Prop :=
 theorem all_empty (p : α → Prop) : All p #[] := fun i lt =>
   by contradiction
 
+@[simp]
 theorem push_all (hAll : All p xs) (hx : p x) : All p (xs.push x) := by
   intros
   intro i lt
@@ -81,3 +82,17 @@ termination_by xs.size - i
 
 theorem filter_all (p : α → Prop) [DecidablePred p] : All p (filter p xs) := by
   simp [filter, filter_go_all]
+
+
+/-
+This version of the proof uses Lean's functional induction feature, which allows the `induction`
+tactic to automatically follow the recursive structure of a function. Using the induction tactic
+also makes it easier to write a highly automated proof that will be more robust in the face of minor
+changes to `filter`.
+-/
+theorem filter_go_all' [DecidablePred p] (hAcc : All p acc)
+    : All p (filter.go p xs i acc) := by
+  induction i, acc using filter.go.induct p xs <;> unfold filter.go <;> simp [*]
+
+theorem filter_all' (p : α → Prop) [DecidablePred p] : All p (filter p xs) := by
+  simp [filter, filter_go_all']
