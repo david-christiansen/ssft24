@@ -41,16 +41,46 @@ The following files are part of the first lecture:
 ### Lab Session
 
 Please experiment with the Lean features and the ideas that were
-presented in the first lecture. Here are some exercises to get you
-started:
+presented in the first lecture. We don't expect you to have time to
+complete all these exercises, so please do the first one and then pick
+what you're interested in to work on:
 
- * Implement `map` for list. What are some properties that it should
+ * Define a function that appends two lists. Prove that the length of
+   the output is the sum of the lengths of the input.
+ * Implement `map` for `List`. What are some properties that it should
    satisfy? Prove that it does.
+ * Define a binary tree datatype with two constructors: one represents
+   the empty tree, and the other represents a labelled branch with a
+   data item and two subtrees.
+   * Define a predicate `All : (α → Prop) → Tree α → Prop` such that
+     `All p t` is true whenever all data items in `t` satisfy `p`
+   * Define a predicate `Sorted : Tree Nat → Prop` such that empty
+     trees are sorted and branches are sorted if their left and right
+     subtrees are sorted, all elements of the left subtree are less
+     than or equal to the data item, and all elements of the right
+     subtree are strictly greater than the data item.
+   * Define a function `Tree.insert : Nat → Tree Nat → Tree Nat` that
+     inserts a natural number into the given tree. If the input tree
+     is sorted, then the output should be.
+   * Prove that if a predicate holds for all natural numbers in a
+     tree, and it holds for some new number, then it also holds for
+     the all numbers in the tree with the new number inserted
+   * Prove that inserting a number into a sorted tree yields a sorted
+     tree.
+   * Write an inductive predicate that holds when a tree contains a
+     given element. It should have signature
+     `Tree.Mem (x : α) : Tree α → Prop`.
+   * Prove that if all data items in a tree satisfy a predicate and
+     some particular item is in the tree (according to `Tree.Mem`)
+   * Write a function that determines whether a given `Nat` is
+     contained within a sorted tree, with type `Nat → Tree Nat → Bool`.
+   * Prove that if all numbers in a tree `t` satisfy a predicate, and
+     `contains n t = true`, then `n` satisfies the predicate.
+   * Prove the correctness of `contains`: if a tree is sorted, then
+     `Tree.Mem n t` is logically equivalent to `contains n t = true`.
  * State and prove some further properties of array filter (see the
    list filter file if you need inspiration)
  * Implement `map` for arrays. State and prove some properties about it.
- * Define a function that appends two lists. Prove that the length of
-   the output is the sum of the lengths of the input.
 
 ## Second Lecture: 
 
