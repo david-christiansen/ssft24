@@ -114,20 +114,28 @@ The following files are part of the second lecture:
 These exercises are intended to be done in the context of the
 development from the second lecture.
 
+ * Add a bitwise xor operator to Expr. Lean's bitwise xor operator is
+   `^^^`.
  * Add a new case to the optimizer for `Expr` and update the
-   correctness proof accordingly
+   correctness proof accordingly.
  * These exercises don't require modifications to the `Stmt` datatype:
    * Add a unary `if` statement (that is, one without an `else`clause)
      to the user-facing syntax for `Stmt`
    * Add a `do...while...` statement to the surface syntax that
      executes the body at least once
- * Add a `switch` statement like that of C, which takes an expression
-   and a sequence of clauses, each of which is a value and a
-   statement. The expression is evaluated, and then the first clause
-   whose value matches its result is executed. If no clause matches,
-   nothing happens.
-    * First, add it to the `Stmt` datatype and design a surface syntax
-      for it.
-    * Next, add it to the optimizer. It's fine if it does nothing.
-    * Add `switch` to the big-step semantics, and update the various
-      proofs.
+ * Add a failure handler expression to `Expr`. The expression
+   `try E1 then E2` should have `E1`'s value, unless the value is
+   undefined, in which case it has `E2`'s value. Update the concrete
+   syntax and the evaluator accordingly.
+ * Add a random number generator to Imp:
+   * Add a new statement that assigns a pseudorandom value to a given
+     variable, and give it a concrete syntax
+   * Define a pseudorandom number generator as a two-field structure
+     with a state and a function from a state to a pair of a fresh
+     state and a value. Implement a generator - there's no need for it
+     to be secure, and a generator that just counts upwards is fine
+     for the purposes of this exercise.
+   * Update the big-step semantics to thread a random number generator
+     through program execution. Provide a big-step rule for the `rand`
+     statement and update the rest of Imp as needed so all the proofs
+     go through.
