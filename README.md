@@ -18,6 +18,34 @@ and it prints out `Lean (version 4.7.0, ...)`, and typing
 `lean +nightly-2024-05-19 --version` prints something like
 `Lean (version 4.9.0-nightly-2024-04-19, ...)`.
 
+In order to follow along in the final demo, you'll also need CaDiCaL -
+the code has been tested with version 1.9.5. It is available in many
+standard software repositories.
+
+## Branches
+
+In case you want to follow along, the sample code in this repository
+is organized into branches that represent checkpoints in the
+interactive development:
+
+ * `lec1/start` - the initial state of the repository
+ * `lec1/step1` - the repository after the introductory code
+   (`Intro.lean`) has been added and the implementation for `filter`
+   on lists is no longer a stub
+ * `lec1/step2` - the repository after the implementation from
+   `lec1/step1` was verified
+ * `lec1/step3` - the implementation using packed arrays has been
+   added, but not verified
+ * `lec1/step4` - the final state
+ * `lec2/start` - the code from the first lecture is complete, and the
+   second lecture is in its starting state (missing some proofs and
+   definitions)
+ * `lec2/step1` - the expression language has been implemented, with a
+   verified optimization pass
+ * `lec2/step2` - the statements have been implemented, with a
+   big-step semantics and a verified optimization pass
+ * `main` and `lec2/step3` - the final state of the imperative language
+
 ## First Lecture: Introduction to Lean
 
 This lecture is an introduction to writing programs, and proving them
