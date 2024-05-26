@@ -44,7 +44,7 @@ interactive development:
    definitions)
  * `lec2/step1` - the expression language has been implemented, with a
    verified optimization pass
- * `lec2/step2` - the statements have been implemented, with a
+ * `lec2/step2` - the statements of Imp have been implemented, with a
    big-step semantics and a verified optimization pass
  * `main` and `lec2/step3` - the final state of the imperative language
 
