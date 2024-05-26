@@ -139,3 +139,87 @@ development from the second lecture.
      through program execution. Provide a big-step rule for the `rand`
      statement and update the rest of Imp as needed so all the proofs
      go through.
+
+
+## Tactic Cheatsheet
+
+These are a few of the proof tactics that may be useful for the lab
+sessions, along with summaries of the arguments and configuration
+options that we think are most relevant:
+
+ * `assumption` - if a local hypothesis solves the goal, use it
+ * `contradiction` - search the local context for an "obvious"
+   contradiction, and close the goal if it's found
+ * `omega` - a Presburger arithmetic solver that can take care of many
+   goals involving arithmetic
+ * `intro x ...` - Transforms a goal like `A -> ... -> C` into `C`,
+   with `A ...` made into assumptions named `x ...`
+   * `x` can be replaced with a pattern when `A` has exactly one
+     constructor
+ * `unfold f` - replaces `f` with its definition in the goal
+   * `unfold f at h` - replaces `f` with its definition in hypothesis
+     `h`
+ * `simp` - simplify the goal using a collection of rewrite rules. If
+   `simp` makes the goal simple enough, it will go ahead and solve it.
+   * `simp [r, ...]` - simplify the goal using additional rules `r,
+     ...`. Rule possibilities include definition names, which causes
+     them to be unfolded; proofs of equalities, which causes the left
+     side to be replaced with the right side; and `*`, which causes
+     local assumptions to be taken into account
+   * `simp at h` - simplify hypothesis `h` instead of the goal (can be
+     combined with rules list)
+   * `simp_all` - perform as much simplification as possible
+ * `rw [r1, ...]` - apply rewrites to the goal, one after the
+   other. Each rewrite is the name of a theorem or assumption that
+   proves an equality, and the left side is replaced with the right
+   side. Preceding the rule with `←` causes the right side to be
+   replaced with the left. Additional assumptions of the equality
+   theorems are added as new goals. Can also be used with `at` to
+   rewrite in an assumption.
+ * `apply l` - apply the lemma `l` to the goal, matching up the
+   lemma's conclusion with the goal and creating new goals for each
+   assumption of the lemma that must be satisfied
+   * `apply?` - search the Lean libraries for lemmas that might be
+     relevant
+ * `exact l` - just like `apply`, except fails if it introduces new
+   goals
+   * `exact?` - search the Lean libraries for lemmas that close the
+     goal
+ * `constructor` - apply the first type-correct constructor of the
+   goal type
+ * `T1 <;> T2` - runs `T1`, then runs `T2` in each subgoal that it
+   creates
+ * `repeat T` - runs `T` repeatedly until it fails
+ * `repeat' T` - runs `T` repeatedly in each subgoal until it fails
+ * `try T` - runs `T`, resetting the proof state if `T` fails
+ * `. TACS` - in a context with multiple goals, focuses on the
+   first. Fails if tactics `TACS` doesn't result in zero open goals.
+ * `next =>` - in a context with multiple goals, focuses on the
+   first. Fails if included tactics don't result in zero open goals.
+ * `next h ...=>` - in a context with multiple goals, focuses on the
+   first, assigning the names `h ...` to its unnamed
+   assumptions. Fails if included tactics don't result in zero open
+   goals.
+ * `case c h ... =>` - in a context with multiple goals, focuses on
+   the one named `c`. Otherwise like `next h ... =>`.
+ * `split` - in a goal that contains an `if` or `match`, creates one
+   new goal for each possible path of execution.
+ * `cases e` - create a new goal for each constructor of a datatype or
+   inductively defined proposition that is `e`'s type
+   * `cases e with | c h ... => TACS ...` - like `cases`, but requires
+     an explicit case for each goal `c` with hypotheses `h ...`
+ * `induction x` - create a new goal for each constructor of a datatype
+   or inductively defined proposition, assuming the current goal for
+   each recursive occurrence (that is, with indution hypotheses).
+   * `induction e with | c h ... => TACS ...` - like `induction`, but
+     requires an explicit case for each goal `c` with hypotheses `h
+     ...`
+   * `induction e using i` - like `induction`, but uses the induction
+     principle `i` instead of the default one
+ * `have x : t := e` - introduce a new local assumption `x : t`, where
+   `e` proves `t` (`e` often begins with `by`)
+   * `x` can be omitted; in this case, the assumption is named `this`
+   * `: t` can be omitted when `e`'s type can be inferred
+   * `x` can be replaced with a pattern when `e`'s type has at most
+     one constructor
+
