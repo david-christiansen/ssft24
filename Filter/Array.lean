@@ -4,7 +4,7 @@ namespace Filter.Array
 This implementation of `filter` shows a few interesting aspects of Lean:
 
  * Lean's `do`-notation contains syntax for mutable variables and iteration. These are translated
-   behind the scenes to appropriate monad transformers.
+   behind the scenes to appropriate pure functions.
 
  * `Array.push` will mutate the array in place if the array value's reference count is exactly 1, so
    this code's seeming use of mutation becomes real mutation, with accidental aliasing leading to
