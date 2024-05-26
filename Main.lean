@@ -14,7 +14,7 @@ def main : List String → IO UInt32
     match readJsonArray input with
     | .error e => IO.eprintln e; return 3
     | .ok vals =>
-      for v in Filter.Array.filter (query.matches · = true) vals do
+      for v in Filter.List.filter (query.matches · = true) vals.toList do
         IO.println v
       return 0
   | _ => do
