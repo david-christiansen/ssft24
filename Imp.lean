@@ -49,6 +49,6 @@ where
 
 
 theorem popCount_correctBig :
-    ∃ ρ, (run (Env.init x) popcount 8) = some ρ ∧ ρ "x" = pop_spec x := by
+    ∃ σ, (run (Env.init x) popcount 8) = some σ ∧ σ "x" = pop_spec x := by
   simp [run, popcount, Expr.eval, Expr.BinOp.apply, Env.set, Value, pop_spec, pop_spec.go]
   bv_decide

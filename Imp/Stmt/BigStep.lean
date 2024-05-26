@@ -28,7 +28,7 @@ theorem Truthy.not_none : Truthy none = False := by
   simp [Truthy]
 
 @[simp]
-theorem Truthy.eval_const : Truthy (Expr.eval ρ (.const v)) = (v ≠ 0) := by
+theorem Truthy.eval_const : Truthy (Expr.eval σ (.const v)) = (v ≠ 0) := by
   simp [Truthy, Expr.eval]
 
 /--
@@ -37,7 +37,7 @@ Falsiness: the result of evaluating an expression is "falsy" if it's 0
 def Falsy (v : Option Value) : Prop := v = some 0
 
 @[simp]
-theorem Falsy.eval_const : Falsy (Expr.eval ρ (.const v)) = (v = 0) := by
+theorem Falsy.eval_const : Falsy (Expr.eval σ (.const v)) = (v = 0) := by
   simp [Falsy, Expr.eval]
 
 @[simp]
@@ -61,39 +61,39 @@ namespace Stmt
 
 
 /--
-Big-step semantics: `BigStep ρ s ρ'` means that running the program `s` in the starting state `ρ` is
-termination with the final state `ρ'`.
+Big-step semantics: `BigStep σ s σ'` means that running the program `s` in the starting state `σ` is
+termination with the final state `σ'`.
 -/
 inductive BigStep : Env → Stmt → Env → Prop where
   | skip :
-    BigStep ρ (imp {skip;}) ρ
+    BigStep σ (imp {skip;}) σ
   | seq :
-    BigStep ρ s1 ρ' → BigStep ρ' s2 ρ'' →
-    BigStep ρ (imp{ ~s1 ~s2}) ρ''
+    BigStep σ s1 σ' → BigStep σ' s2 σ'' →
+    BigStep σ (imp{ ~s1 ~s2}) σ''
   | assign :
-    e.eval ρ = some v →
-    BigStep ρ (imp {~x := ~e;}) (ρ.set x v)
+    e.eval σ = some v →
+    BigStep σ (imp {~x := ~e;}) (σ.set x v)
   | ifTrue :
-    Truthy (c.eval ρ) → BigStep ρ s1 ρ' →
-    BigStep ρ (imp {if (~c) {~s1} else {~s2}}) ρ'
+    Truthy (c.eval σ) → BigStep σ s1 σ' →
+    BigStep σ (imp {if (~c) {~s1} else {~s2}}) σ'
   | ifFalse :
-    Falsy (c.eval ρ) → BigStep ρ s2 ρ' →
-    BigStep ρ (imp {if (~c) {~s1} else {~s2}}) ρ'
+    Falsy (c.eval σ) → BigStep σ s2 σ' →
+    BigStep σ (imp {if (~c) {~s1} else {~s2}}) σ'
   | whileTrue :
-    Truthy (c.eval ρ) →
-    BigStep ρ body ρ' →
-    BigStep ρ' (imp {while (~c) {~body}}) ρ'' →
-    BigStep ρ (imp {while (~c) {~body}}) ρ''
+    Truthy (c.eval σ) →
+    BigStep σ body σ' →
+    BigStep σ' (imp {while (~c) {~body}}) σ'' →
+    BigStep σ (imp {while (~c) {~body}}) σ''
   | whileFalse :
-    Falsy (c.eval ρ) →
-    BigStep ρ (imp {while (~c) {~body}}) ρ
+    Falsy (c.eval σ) →
+    BigStep σ (imp {while (~c) {~body}}) σ
 
 attribute [simp] BigStep.skip
 
 /--
 `swap` terminates, and the resulting environment contains swapped inputs.
 -/
-example : ∃ρ', BigStep (Env.init 0 |>.set "x" 5 |>.set "y" 22) swap ρ' ∧ ρ'.get "x" = 22 ∧ ρ'.get "y" = 5 := by
+example : ∃σ', BigStep (Env.init 0 |>.set "x" 5 |>.set "y" 22) swap σ' ∧ σ'.get "x" = 22 ∧ σ'.get "y" = 5 := by
   unfold swap
   apply Exists.intro
   constructor
@@ -114,20 +114,20 @@ example : ∃ρ', BigStep (Env.init 0 |>.set "x" 5 |>.set "y" 22) swap ρ' ∧ �
 /--
 `swap` terminates, and the resulting environment contains swapped inputs. This proof is shorter.
 -/
-example : ∃ρ', BigStep (Env.init 0 |>.set "x" 5 |>.set "y" 22) swap ρ' ∧ ρ'.get "x" = 22 ∧ ρ'.get "y" = 5 := by
+example : ∃σ', BigStep (Env.init 0 |>.set "x" 5 |>.set "y" 22) swap σ' ∧ σ'.get "x" = 22 ∧ σ'.get "y" = 5 := by
   repeat' constructor
 
 /--
 `swap` terminates, and the resulting environment contains swapped inputs. This version works no
 matter what the input values are.
 -/
-example : ∃ρ', BigStep (Env.init 0 |>.set "x" x |>.set "y" y) swap ρ' ∧ ρ'.get "x" = y ∧ ρ'.get "y" = x  := by
+example : ∃σ', BigStep (Env.init 0 |>.set "x" x |>.set "y" y) swap σ' ∧ σ'.get "x" = y ∧ σ'.get "y" = x  := by
   repeat' constructor
 
 /--
 `min` computes the minimum of its inputs.
 -/
-example : ∃ρ', BigStep (Env.init 0 |>.set "x" x |>.set "y" y) min ρ' ∧ if x < y then ρ'.get "min" = x else ρ'.get "min" = y := by
+example : ∃σ', BigStep (Env.init 0 |>.set "x" x |>.set "y" y) min σ' ∧ if x < y then σ'.get "min" = x else σ'.get "min" = y := by
   unfold min
   by_cases h : x < y
   . apply Exists.intro; constructor
@@ -148,7 +148,7 @@ def loop := imp {while (1) {skip;}}
 /--
 `loop` is really an infinite loop - there is no final state that it can result in.
 -/
-theorem infinite_loop : ¬ BigStep ρ loop ρ' := by
+theorem infinite_loop : ¬ BigStep σ loop σ' := by
   generalize h' : loop = l
   intro h
   induction h <;> try (simp [loop, *] at *; done)
@@ -161,7 +161,7 @@ theorem infinite_loop : ¬ BigStep ρ loop ρ' := by
     contradiction
 
 /-- Optimizing a program doesn't change its meaning -/
-theorem optimize_ok : BigStep ρ s ρ' → BigStep ρ s.optimize ρ' := by
+theorem optimize_ok : BigStep σ s σ' → BigStep σ s.optimize σ' := by
   intro h
   induction h with simp only [optimize]
   | «skip» => constructor
@@ -232,49 +232,49 @@ Run a program, with the depth of the recursive calls limited by the `Nat` parame
 if the program doesn't terminate fast enough or if some other problem means the result is undefined
 (e.g. division by zero).
  -/
-def run (ρ : Env) (s : Stmt) : Nat → Option Env
+def run (σ : Env) (s : Stmt) : Nat → Option Env
   | 0 => none
   | n + 1 =>
     match s with
     | imp {skip;} =>
-      some ρ
+      some σ
     | imp {~s1 ~s2} => do
-      let ρ' ← run ρ s1 n
-      run ρ' s2 n
+      let σ' ← run σ s1 n
+      run σ' s2 n
     | imp {~x := ~e;} => do
-      let v ← e.eval ρ
-      pure (ρ.set x v)
+      let v ← e.eval σ
+      pure (σ.set x v)
     | imp {if (~c) {~s1} else {~s2}} => do
-      let v ← c.eval ρ
+      let v ← c.eval σ
       if v = 0 then
-        run ρ s2 n
+        run σ s2 n
       else
-        run ρ s1 n
+        run σ s1 n
     | imp {while (~c) {~s1}} => do
-      let v ← c.eval ρ
+      let v ← c.eval σ
       if v = 0 then
-        pure ρ
+        pure σ
       else
-        let ρ' ← run ρ s1 n
-        run ρ' (imp {while (~c) {~s1}}) n
+        let σ' ← run σ s1 n
+        run σ' (imp {while (~c) {~s1}}) n
 
 /--
 `run` is correct: if it returns an answer, then that final state can be reached by the big-step
 semantics. This is not total correctness - `run` could always return `none` - but it does increase
 confidence.
 -/
-theorem run_some_implies_big_step : run ρ s n = some ρ' → BigStep ρ s ρ' := by
+theorem run_some_implies_big_step : run σ s n = some σ' → BigStep σ s σ' := by
   intro term
-  induction ρ, s, n using run.induct generalizing ρ' <;> unfold run at term <;> simp_all
-  case case3 ρ n s1 s2 ih1 ih2 =>
-    let ⟨ρ'', ⟨st1, st2⟩⟩ := term
+  induction σ, s, n using run.induct generalizing σ' <;> unfold run at term <;> simp_all
+  case case3 σ n s1 s2 ih1 ih2 =>
+    let ⟨σ'', ⟨st1, st2⟩⟩ := term
     constructor
     . apply ih1
       apply st1
     . apply ih2
       apply st2
   case case4 =>
-    let ⟨ρ'', ⟨evEq, setEq⟩⟩ := term
+    let ⟨σ'', ⟨evEq, setEq⟩⟩ := term
     subst_eqs
     constructor; assumption
   case case5 ih1 ih2 =>
@@ -297,7 +297,7 @@ theorem run_some_implies_big_step : run ρ s n = some ρ' → BigStep ρ s ρ' :
       simp [Falsy, *]
     . subst_eqs; simp [*] at *
       simp [h] at step
-      let ⟨ρ', ⟨oneStep, loopStep⟩⟩ := step
+      let ⟨σ', ⟨oneStep, loopStep⟩⟩ := step
       apply BigStep.whileTrue
       . rw [evEq]
         simp [*]

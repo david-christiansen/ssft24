@@ -25,7 +25,7 @@ def optimize : Expr → Expr
 /--
 Optimization doesn't change the meaning of any expression
 -/
-theorem optimize_ok (e : Expr) : e.eval ρ = e.optimize.eval ρ := by
+theorem optimize_ok (e : Expr) : e.eval σ = e.optimize.eval σ := by
   induction e <;> simp [optimize]
   case un op e ih =>
     split <;> simp [eval, *]
@@ -40,5 +40,5 @@ theorem optimize_ok (e : Expr) : e.eval ρ = e.optimize.eval ρ := by
 /--
 Optimization doesn't change the meaning of any expression
 -/
-theorem optimize_ok' (e : Expr) : e.eval ρ = e.optimize.eval ρ := by
+theorem optimize_ok' (e : Expr) : e.eval σ = e.optimize.eval σ := by
   induction e using optimize.induct <;> simp [optimize, eval, *]
