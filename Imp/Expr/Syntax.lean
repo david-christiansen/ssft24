@@ -5,18 +5,30 @@ namespace Imp.Expr
 
 open Lean PrettyPrinter Parenthesizer
 
+
+/- Add a new nonterminal to Lean's grammar, called `varname` -/
+/-- Variable names in Imp -/
 declare_syntax_cat varname
+
+/- There are two productions: identifiers and antiquoted terms -/
 syntax ident : varname
 syntax:max "~" term:max : varname
 
+/- `varname`s are included in terms using `var { ... }`, which is a hook on which to hang the macros
+that translate the `varname` syntax into ordinary Lean expressions. -/
 syntax "var " "{" varname "}" : term
 
+/- These macros translate each production of the `varname` nonterminal into Lean expressions -/
 macro_rules
   | `(var { $x:ident }) => `(term|$(quote x.getId.toString))
   | `(var { ~$stx }) => pure stx
 
+/-- Expressions in Imp -/
 declare_syntax_cat exp
+
+/-- Variable names -/
 syntax varname : exp
+
 /-- Numeric constant -/
 syntax num : exp
 
@@ -33,7 +45,9 @@ syntax:65 exp:65 " + " exp:66 : exp
 /-- Subtraction -/
 syntax:65 exp:65 " - " exp:66 : exp
 
+/-- Left shift -/
 syntax:55 exp:55 " <<< " exp:56 :exp
+/-- Right shift -/
 syntax:55 exp:55 " >>> " exp:56 :exp
 
 /-- Boolean negation -/
@@ -49,7 +63,9 @@ syntax:50 exp:50 " > " exp:51 : exp
 /-- Equal -/
 syntax:45 exp:45 " == " exp:46 : exp
 
+/-- Bitwise and -/
 syntax:40 exp:40 " &&& " exp:41 :exp
+/-- Bitwise or -/
 syntax:40 exp:40 " ||| " exp:41 :exp
 
 /-- Boolean conjunction -/
@@ -57,12 +73,13 @@ syntax:35 exp:35 " && " exp:36 : exp
 /-- Boolean disjunction -/
 syntax:35 exp:35 " || " exp:36 : exp
 
-/-- Parens -/
+/-- Parentheses for grouping -/
 syntax "(" exp ")" : exp
 
 /-- Escape to Lean -/
 syntax:max "~" term:max : exp
 
+/-- Embed an Imp expression into a Lean expression -/
 syntax:min "expr " "{ " exp " }" : term
 
 open Lean in
@@ -96,8 +113,9 @@ macro_rules
   | `(expr{~$stx}) => pure stx
 
 
--- Shamelessly stolen from Lean's term parenthesizer - applies the precedence rules in the grammar
--- to add parentheses as needed.
+-- Copied from Lean's term parenthesizer - applies the precedence rules in the grammar to add
+-- parentheses as needed. This isn't needed when adding new input syntax to Lean, but because the
+-- file `Delab.lean` makes Lean use this syntax in its output, the parentheses are needed.
 @[category_parenthesizer exp]
 def exp.parenthesizer : CategoryParenthesizer | prec => do
   maybeParenthesize `exp true wrapParens prec $

@@ -20,7 +20,9 @@ and it prints out `Lean (version 4.7.0, ...)`, and typing
 
 In order to follow along in the final demo, you'll also need CaDiCaL -
 the code has been tested with version 1.9.5. It is available in many
-standard software repositories.
+standard software repositories. For the final demo, you may also need
+to increase your stack space - `ulimit -s 65520` seems to reliably
+work.
 
 ## Branches
 

@@ -20,15 +20,22 @@ inductive Stmt where
   | while (cond : Expr) (body : Stmt)
 deriving Repr, DecidableEq
 
-
+/-- Imp statements -/
 declare_syntax_cat stmt
+/-- A statement that does nothing -/
 syntax "skip" ";" : stmt
+/-- Sequencing: one statement after another -/
 syntax stmt ppDedent(ppLine stmt) : stmt
+/-- Assignment -/
 syntax varname " := " exp ";" : stmt
+/-- Conditional statement -/
 syntax "if " "(" exp ")" ppHardSpace "{" ppLine stmt ppDedent(ppLine "}" ppHardSpace "else" ppHardSpace "{") ppLine stmt ppDedent(ppLine "}") : stmt
+/-- Loop -/
 syntax "while " "(" exp ")" ppHardSpace "{" ppLine stmt ppDedent(ppLine "}") : stmt
+/-- Escape to Lean -/
 syntax:max "~" term:max : stmt
 
+/-- Include an Imp statement in Lean code -/
 syntax:min "imp" ppHardSpace "{" ppLine stmt ppDedent(ppLine "}") : term
 
 /-

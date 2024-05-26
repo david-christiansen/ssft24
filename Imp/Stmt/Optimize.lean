@@ -4,6 +4,7 @@ import Imp.Stmt.Delab
 
 namespace Imp.Stmt
 
+/-- Optimize a statement -/
 def optimize : Stmt → Stmt
   | imp {skip;} => imp {skip;}
   | imp {~s1 ~s2} =>

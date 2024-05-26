@@ -60,6 +60,10 @@ theorem Truthy.not_falsy : Truthy v → ¬Falsy v := by
 namespace Stmt
 
 
+/--
+Big-step semantics: `BigStep ρ s ρ'` means that running the program `s` in the starting state `ρ` is
+termination with the final state `ρ'`.
+-/
 inductive BigStep : Env → Stmt → Env → Prop where
   | skip :
     BigStep ρ (imp {skip;}) ρ
@@ -156,6 +160,7 @@ theorem infinite_loop : ¬ BigStep ρ loop ρ' := by
     simp at cFalse
     contradiction
 
+/-- Optimizing a program doesn't change its meaning -/
 theorem optimize_ok : BigStep ρ s ρ' → BigStep ρ s.optimize ρ' := by
   intro h
   induction h with simp only [optimize]
@@ -222,7 +227,11 @@ theorem optimize_ok : BigStep ρ s ρ' → BigStep ρ s.optimize ρ' := by
       . simp [optimize] at ih2
         assumption
 
-
+/--
+Run a program, with the depth of the recursive calls limited by the `Nat` parameter. Returns `none`
+if the program doesn't terminate fast enough or if some other problem means the result is undefined
+(e.g. division by zero).
+ -/
 def run (ρ : Env) (s : Stmt) : Nat → Option Env
   | 0 => none
   | n + 1 =>
@@ -249,7 +258,12 @@ def run (ρ : Env) (s : Stmt) : Nat → Option Env
         let ρ' ← run ρ s1 n
         run ρ' (imp {while (~c) {~s1}}) n
 
-theorem run'_correct : run ρ s n = some ρ' → BigStep ρ s ρ' := by
+/--
+`run` is correct: if it returns an answer, then that final state can be reached by the big-step
+semantics. This is not total correctness - `run` could always return `none` - but it does increase
+confidence.
+-/
+theorem run_some_implies_big_step : run ρ s n = some ρ' → BigStep ρ s ρ' := by
   intro term
   induction ρ, s, n using run.induct generalizing ρ' <;> unfold run at term <;> simp_all
   case case3 ρ n s1 s2 ih1 ih2 =>

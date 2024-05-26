@@ -1,3 +1,7 @@
+/-
+This file makes the convenient syntax from `Imp.Stmt.Basic` show up in Lean's output. It's not part
+of what's being taught in the lectures.
+-/
 import Lean.PrettyPrinter.Delaborator
 import Imp.Stmt.Basic
 import Imp.Expr

@@ -1,3 +1,7 @@
+/-
+This file makes the convenient syntax from `Imp.Expr.Syntax` show up in Lean's output. It's not part
+of what's being taught in the lectures.
+-/
 import Lean.PrettyPrinter.Delaborator
 import Imp.Expr.Basic
 import Imp.Expr.Syntax
@@ -71,7 +75,7 @@ partial def delabExprInner : DelabM (TSyntax `exp) := do
 
 @[delab app.Imp.Expr.const, delab app.Imp.Expr.var, delab app.Imp.Expr.un, delab app.Imp.Expr.bin]
 partial def delabExpr : Delab := do
-  -- This delaborator only understands a certain arity - bail if it's incorrect
+  -- This delaborator only understands a certain arity - give up if it's incorrect
   guard <| match_expr ← getExpr with
     | Expr.const _ => true
     | Expr.var _ => true
