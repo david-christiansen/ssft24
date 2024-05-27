@@ -16,8 +16,6 @@ inductive BinOp where
 deriving Repr, DecidableEq
 
 end Expr
--- The `Expr` namespace is ended here to avoid doubly-nesting the namespace for the constructors of
--- the `Expr` datatype
 
 /-- Expressions -/
 inductive Expr where
