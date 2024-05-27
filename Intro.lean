@@ -11,45 +11,32 @@ type classes, and do-notation for programming with monads.
 -/
 
 -- Here's a function that doubles a natural number.
-def double (n : Nat) : Nat :=
-  match n with
-  | 0 => 0
-  | n' + 1 => double n' + 2
+def double (n : Nat) : Nat := sorry
 
 -- Test it using `#eval`, which is a bit like an in-editor REPL
-#eval double 5
+-- #eval double 5
 
 -- `#check` is used to to check types
-#check double
+-- #check double
 
 -- Arguments that come "after the colon" can be matched with top-level
 -- patterns - no `match` necessary!.
-def double' : Nat → Nat
-  | 0 => 0
-  | n' + 1 => double' n' + 2
+def double' : Nat → Nat := sorry
 
 -- These may both be used.
-def multiply (k : Nat) : Nat → Nat
-  | 0 => 0
-  | n' + 1 => multiply k n' + k
+def multiply (k : Nat) : Nat → Nat := sorry
 
 -- If parameter names are just used, then they're treated as parameters to the whole function. Here,
 -- α is the type argument, implicitly specified just by using it.
-def append : List α → List α → List α
-  | [], ys => ys
-  | x :: xs, ys => x :: append xs ys
+def append : List α → List α → List α := sorry
 
 -- Datatypes are defined with `inductive`
 inductive Tree (α : Type) where
-  | leaf : Tree α
-  | branch : Tree α → α → Tree α → Tree α
 
 -- Putting a function inside a type's namespace allows dot-notation:
-def Tree.toList : Tree α → List α
-  | leaf => []
-  | branch l x r => l.toList ++ [x] ++ r.toList
+def Tree.toList : Tree α → List α := sorry
 
-#eval (Tree.branch (Tree.branch Tree.leaf 1 Tree.leaf) 2 Tree.leaf).toList
+-- #eval (Tree.branch (Tree.branch Tree.leaf 1 Tree.leaf) 2 Tree.leaf).toList
 
 /-
 
@@ -62,15 +49,12 @@ A predicate is a proposition with a free variable that might hold (or not) for a
 
 -/
 inductive Even : Nat → Prop where
-  | isEven : (half : Nat) → Even (half + half)
 
-example : Even 6 := .isEven 3
+-- example : Even 6 := .isEven 3
 
 inductive Repeats (x : α) : List α → Prop where
-  | nil : Repeats x []
-  | cons : Repeats x xs → Repeats x (x :: xs) -- here xs is implicitly an argument
 
-example : Repeats 3 [3,3,3] := .cons (.cons (.cons .nil))
+-- example : Repeats 3 [3,3,3] := .cons (.cons (.cons .nil))
 
 /-
 Lean types come in two flavors:
@@ -87,7 +71,7 @@ instance, this function takes two predicates over some type α and builds a new 
 asserts both:
 -/
 
-def Both (p q : α → Prop) : α → Prop := fun x => p x ∧ q x
+def Both (p q : α → Prop) : α → Prop := sorry
 
 /-
 For more details on this, please see _Theorem Proving in Lean 4_ and _Functional Programming in
