@@ -23,7 +23,7 @@ def double (n : Nat) : Nat :=
 #check double
 
 -- Arguments that come "after the colon" can be matched with top-level
--- patterns, reminiscent of Haskell's multiple equations.
+-- patterns - no `match` necessary!.
 def double' : Nat → Nat
   | 0 => 0
   | n' + 1 => double' n' + 2
@@ -33,14 +33,13 @@ def multiply (k : Nat) : Nat → Nat
   | 0 => 0
   | n' + 1 => multiply k n' + k
 
--- Just as with Haskell type variables, arguments can just be used, and they're treated as
--- parameters to the whole function. Here, α is the type argument, implicitly specified just by
--- using it.
+-- If parameter names are just used, then they're treated as parameters to the whole function. Here,
+-- α is the type argument, implicitly specified just by using it.
 def append : List α → List α → List α
   | [], ys => ys
   | x :: xs, ys => x :: append xs ys
 
--- Datatypes are defined with "inductive"
+-- Datatypes are defined with `inductive`
 inductive Tree (α : Type) where
   | leaf : Tree α
   | branch : Tree α → α → Tree α → Tree α
