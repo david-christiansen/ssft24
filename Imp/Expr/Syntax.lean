@@ -6,7 +6,6 @@ namespace Imp.Expr
 open Lean PrettyPrinter Parenthesizer
 
 
-/- Add a new nonterminal to Lean's grammar, called `varname` -/
 /-- Variable names in Imp -/
 declare_syntax_cat varname
 

@@ -39,7 +39,7 @@ syntax:max "~" term:max : stmt
 syntax:min "imp" ppHardSpace "{" ppLine stmt ppDedent(ppLine "}") : term
 
 /-
-The above rules are equivalent to the following, but with nicer-looking compiler output:
+Equivalent to:
 
 syntax "skip" ";" : stmt
 syntax stmt stmt : stmt
