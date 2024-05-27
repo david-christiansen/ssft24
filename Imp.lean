@@ -47,7 +47,6 @@ where
       let pop := pop + (x &&& 1#32)
       go (x >>> 1#32) pop i
 
-
 theorem popCount_correctBig :
     ∃ σ, (run (Env.init x) popcount 8) = some σ ∧ σ "x" = pop_spec x := by
   simp [run, popcount, Expr.eval, Expr.BinOp.apply, Env.set, Value, pop_spec, pop_spec.go]

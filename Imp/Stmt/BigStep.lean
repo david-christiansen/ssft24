@@ -5,9 +5,6 @@ import Imp.Stmt.Optimize
 
 namespace Imp
 
-/--
-Truthiness: the result of evaluating an expression is "truthy" if it's defined and non-zero.
--/
 def Truthy (v : Option Value) : Prop :=
   match v with
   | some v => v ≠ 0
@@ -31,9 +28,6 @@ theorem Truthy.not_none : Truthy none = False := by
 theorem Truthy.eval_const : Truthy (Expr.eval σ (.const v)) = (v ≠ 0) := by
   simp [Truthy, Expr.eval]
 
-/--
-Falsiness: the result of evaluating an expression is "falsy" if it's 0
--/
 def Falsy (v : Option Value) : Prop := v = some 0
 
 @[simp]
@@ -59,11 +53,6 @@ theorem Truthy.not_falsy : Truthy v → ¬Falsy v := by
 
 namespace Stmt
 
-
-/--
-Big-step semantics: `BigStep σ s σ'` means that running the program `s` in the starting state `σ` is
-termination with the final state `σ'`.
--/
 inductive BigStep : Env → Stmt → Env → Prop where
 
 /--
@@ -76,25 +65,14 @@ example : ∃σ', BigStep (Env.init 0 |>.set "x" 5 |>.set "y" 22) swap σ' ∧ �
 -/
 example : ∃σ', BigStep (Env.init 0 |>.set "x" 5 |>.set "y" 22) swap σ' ∧ σ'.get "x" = 22 ∧ σ'.get "y" = 5 := by sorry
 
-/--
-`swap` terminates, and the resulting environment contains swapped inputs. This version works no
-matter what the input values are.
--/
 example : ∃σ', BigStep (Env.init 0 |>.set "x" x |>.set "y" y) swap σ' ∧ σ'.get "x" = y ∧ σ'.get "y" = x  := by sorry
 
-/--
-`min` computes the minimum of its inputs.
--/
 example : ∃σ', BigStep (Env.init 0 |>.set "x" x |>.set "y" y) min σ' ∧ if x < y then σ'.get "min" = x else σ'.get "min" = y := by sorry
 
 def loop := imp {while (1) {skip;}}
 
-/--
-`loop` is really an infinite loop - there is no final state that it can result in.
--/
 theorem infinite_loop : ¬ BigStep σ loop σ' := by sorry
 
-/-- Optimizing a program doesn't change its meaning -/
 theorem optimize_ok : BigStep σ s σ' → BigStep σ s.optimize σ' := by sorry
 
 /--
