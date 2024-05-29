@@ -54,6 +54,16 @@ theorem Truthy.not_falsy : Truthy v → ¬Falsy v := by
 namespace Stmt
 
 inductive BigStep : Env → Stmt → Env → Prop where
+  | skip : BigStep σ (imp {skip;}) σ
+  | seq : BigStep σ (imp {~s1 ~s2}) ?_
+  | assign : BigStep σ (imp {~x := ~e;}) ?_
+  | ifTrue :
+    Truthy (c.eval σ) →
+    BigStep σ s1 σ' →
+    BigStep σ (imp {if (~c) {~s1} else {~s2}}) σ'
+  | ifFalse : BigStep σ (imp {if (~c) {~s1} else {~s2}}) ?_
+  | whileTrue : BigStep σ (imp {while (~c) {~s}}) ?_
+  | whileFalse : BigStep σ (imp {while (~c) {~s}}) ?_
 
 /--
 `swap` terminates, and the resulting environment contains swapped inputs.
@@ -73,7 +83,16 @@ def loop := imp {while (1) {skip;}}
 
 theorem infinite_loop : ¬ BigStep σ loop σ' := by sorry
 
-theorem optimize_ok : BigStep σ s σ' → BigStep σ s.optimize σ' := by sorry
+theorem optimize_ok : BigStep σ s σ' → BigStep σ s.optimize σ' := by
+  intro h
+  induction h with simp only [optimize]
+  | «skip» => sorry
+  | seq => sorry
+  | assign => sorry
+  | ifTrue => sorry
+  | ifFalse => sorry
+  | whileTrue => sorry
+  | whileFalse => sorry
 
 /--
 Run a program, with the depth of the recursive calls limited by the `Nat` parameter. Returns `none`
