@@ -149,7 +149,9 @@ development from the second lecture.
    `^^^`.
  * Add a new arithmetic identity to the optimizer for `Expr` and
    update the correctness proof accordingly. For example, it could
-   replace `E - E` with `0`, or `E + 0` with `E`.
+   replace `E + 0` with `E`. Be careful to ensure that it in fact
+   makes sure that optimizations of programs that divide by zero still
+   divide by zero.
  * These exercises don't require modifications to the `Stmt` datatype:
    * Add a unary `if` statement (that is, one without an `else`clause)
      to the user-facing syntax for `Stmt`
