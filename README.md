@@ -101,7 +101,8 @@ what you're interested in to work on:
      given element. It should have signature
      `Tree.Mem (x : α) : Tree α → Prop`.
    * Prove that if all data items in a tree satisfy a predicate and
-     some particular item is in the tree (according to `Tree.Mem`)
+     some particular item is in the tree (according to `Tree.Mem`),
+     then that particular item satisfies the predicate.
    * Write a function that determines whether a given `Nat` is
      contained within a sorted tree, with type `Nat → Tree Nat → Bool`.
    * Prove that if all numbers in a tree `t` satisfy a predicate, and
